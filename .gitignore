@@ -1,5 +1,5 @@
 *.o
-main
 *.swp
-build
-mybuild
+build/
+mybuild/
+.vscode/

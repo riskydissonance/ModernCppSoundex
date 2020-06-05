@@ -1,21 +1,13 @@
-# CMakeList.txt : Top-level CMake project file, do global configuration
-# and include sub-projects here.
-#
 cmake_minimum_required (VERSION 3.8)
 
-project ("Soundex1")
-
-include_directories($ENV{GMOCK_HOME}/googletest/include $ENV{GMOCK_HOME}/googlemock/include)
-link_directories($ENV{GMOCK_HOME}/mybuild/lib/MinSizeRel)
+project (soundex)
 
 add_definitions(-std=c++0x)
 set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -Wall")
+set(CMAKE_SUPPRESS_REGENERATION true)
 
-set(sources 
-   main.cpp 
-   SoundexTest.cpp)
+enable_testing()
 
-add_executable(test ${sources})
-
-target_link_libraries(test gmock)
-target_link_libraries(test gtest)
+add_subdirectory(main)
+add_subdirectory(test)
+add_subdirectory(libsoundex)
