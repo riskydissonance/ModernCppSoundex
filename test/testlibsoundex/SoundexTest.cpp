@@ -21,5 +21,27 @@ TEST_F(SoundexEncoding, PadsWithZerosToEnsureThreeDigits)
 
 TEST_F(SoundexEncoding, ReplacesConsonantWithAppropriateDigits)
 {
-    ASSERT_THAT(soundexEncoder.encode("Ab"), Eq("A100"));
+    EXPECT_THAT(soundexEncoder.encode("Ab"), Eq("A100"));
+    EXPECT_THAT(soundexEncoder.encode("Fc"), Eq("F200"));
+    EXPECT_THAT(soundexEncoder.encode("Ag"), Eq("A200"));
+    EXPECT_THAT(soundexEncoder.encode("Bd"), Eq("B300"));
+    EXPECT_THAT(soundexEncoder.encode("Al"), Eq("A400"));
+    EXPECT_THAT(soundexEncoder.encode("Fm"), Eq("F500"));
+    EXPECT_THAT(soundexEncoder.encode("Ar"), Eq("A600"));
 }
+
+TEST_F(SoundexEncoding, IgnoresNonAlphabetics)
+{
+    ASSERT_THAT(soundexEncoder.encode("A#"), Eq("A000"));
+}
+
+TEST_F(SoundexEncoding, ReplacesMultipleConsonantsWithDigits)
+{
+    ASSERT_THAT(soundexEncoder.encode("Acdl"), Eq("A234"));
+}
+
+TEST_F(SoundexEncoding, LimitsLengthToFourCharacters)
+{
+    ASSERT_THAT(soundexEncoder.encode("Dcdlb").length(), Eq(4u));
+}
+
