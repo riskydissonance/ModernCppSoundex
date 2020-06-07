@@ -65,4 +65,12 @@ TEST_F(SoundexEncoding, IgnoresCaseWhenEncodingConsonants)
     ASSERT_THAT(soundexEncoder.encode("BCDL"), Eq(soundexEncoder.encode("Bcdl")));
 }
 
+TEST_F(SoundexEncoding, CombinesDuplicateCodesWhen2ndLetterDuplicates1st)
+{
+    ASSERT_THAT(soundexEncoder.encode("Bbcd"), Eq("B230"));
+}
 
+TEST_F(SoundexEncoding, DoesNotCombineDuplicateEncodingsSeparatedByVowels)
+{
+    ASSERT_THAT(soundexEncoder.encode("Jbob"), Eq("J110"));
+}
