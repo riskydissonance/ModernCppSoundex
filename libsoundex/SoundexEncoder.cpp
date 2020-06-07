@@ -2,6 +2,9 @@
 #include <string>
 #include <unordered_map>
 
+#include "charutil.h"
+#include "stringutil.h"
+
 namespace soundex
 {
     static const size_t MaxCodeLength{ 4 };
@@ -9,23 +12,7 @@ namespace soundex
 	
     std::string SoundexEncoder::encode(const std::string& word)
     {
-        return zeroPad(upperFront(head(word)) + tail(encodeDigits(word)));
-    }
-
-    std::string SoundexEncoder::zeroPad(const std::string& word)
-    {
-        const auto zeroesNeeded = MaxCodeLength - word.length();
-        return word + std::string(zeroesNeeded, '0');
-    }
-
-    std::string SoundexEncoder::head(const std::string& word)
-    {
-        return word.substr(0, 1);
-    }
-
-    std::string SoundexEncoder::tail(const std::string& word)
-    {
-        return word.substr(1);
+        return zeroPad(upperFront(head(word)) + tail(encodeDigits(word)), MaxCodeLength);
     }
 
     bool SoundexEncoder::isComplete(const std::string& encoding)
@@ -44,10 +31,6 @@ namespace soundex
 	    encoding += encodeDigit(word.front());
     }
 
-    bool SoundexEncoder::isVowel(const char letter)
-    {
-        return std::string("aeiouy").find(lower(letter)) != std::string::npos;
-    }
 
     void SoundexEncoder::encodeLetter(std::string& encoding, const char letter, const char lastLetter)
     {
@@ -86,17 +69,4 @@ namespace soundex
         const auto it =  encodings.find(lower(letter));
         return it == encodings.end() ? NotADigit : it->second;
     }
-
-    std::string SoundexEncoder::upperFront(const std::string& string)
-    {
-        return std::string(1, std::toupper(static_cast<unsigned char>(string.front())));
-    }
-
-	char SoundexEncoder::lower(const char letter)
-    {
-        return std::tolower(static_cast<unsigned char>(letter));
-    }
 }
-
-
-

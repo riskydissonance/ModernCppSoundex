@@ -1,6 +1,8 @@
 set(sources
    soundexencoder.h
    soundexencoder.cpp
+   charutil.h
+   stringutil.h
 )
 
 add_library(libsoundex STATIC
