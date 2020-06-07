@@ -22,6 +22,8 @@ namespace soundex
         return word.substr(0, 1);
     }
 
+
+
     std::string SoundexEncoder::tail(const std::string& word)
     {
         return word.substr(1);
@@ -32,13 +34,20 @@ namespace soundex
 	    return encoding.length() == MaxCodeLength - 1;
     }
 
+    std::string SoundexEncoder::lastDigit(const std::string& encoding)
+    {
+        if (encoding.empty()) return "";
+        return std::string(1, encoding.back());
+    }
+
     std::string SoundexEncoder::encodedDigits(const std::string& word)
     {
         std::string encoding;
         for (auto letter : word)
         {
             if (isComplete(encoding)) break;
-            encoding += encodedDigit((letter));
+        	if(encodedDigit(letter) != lastDigit(encoding))
+				encoding += encodedDigit((letter));
         }
     	
         return encoding;
@@ -58,6 +67,8 @@ namespace soundex
         };
         return encodings.find(letter)->second;
     }
+
+	
 	
 }
 

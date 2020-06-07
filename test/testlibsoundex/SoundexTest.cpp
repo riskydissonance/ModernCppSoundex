@@ -45,3 +45,16 @@ TEST_F(SoundexEncoding, LimitsLengthToFourCharacters)
     ASSERT_THAT(soundexEncoder.encode("Dcdlb").length(), Eq(4u));
 }
 
+TEST_F(SoundexEncoding, IgnoresVowelLikeLetters)
+{
+    ASSERT_THAT(soundexEncoder.encode("Baeiouhycdl"), Eq("B234"));
+}
+
+TEST_F(SoundexEncoding, CombinesDuplicateEncodings)
+{
+    ASSERT_THAT(soundexEncoder.encodedDigit('b'), Eq(soundexEncoder.encodedDigit('f')));
+    ASSERT_THAT(soundexEncoder.encodedDigit('c'), Eq(soundexEncoder.encodedDigit('g')));
+    ASSERT_THAT(soundexEncoder.encodedDigit('d'), Eq(soundexEncoder.encodedDigit('t')));
+
+	ASSERT_THAT(soundexEncoder.encode("Abfcgdt"), Eq("A123"));
+}
