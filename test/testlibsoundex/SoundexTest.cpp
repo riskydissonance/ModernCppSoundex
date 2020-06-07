@@ -47,14 +47,22 @@ TEST_F(SoundexEncoding, LimitsLengthToFourCharacters)
 
 TEST_F(SoundexEncoding, IgnoresVowelLikeLetters)
 {
-    ASSERT_THAT(soundexEncoder.encode("Baeiouhycdl"), Eq("B234"));
+    ASSERT_THAT(soundexEncoder.encode("BaAeEiIoOuUhHyYcCdl"), Eq("B234"));
 }
 
 TEST_F(SoundexEncoding, CombinesDuplicateEncodings)
 {
-    ASSERT_THAT(soundexEncoder.encodedDigit('b'), Eq(soundexEncoder.encodedDigit('f')));
-    ASSERT_THAT(soundexEncoder.encodedDigit('c'), Eq(soundexEncoder.encodedDigit('g')));
-    ASSERT_THAT(soundexEncoder.encodedDigit('d'), Eq(soundexEncoder.encodedDigit('t')));
-
 	ASSERT_THAT(soundexEncoder.encode("Abfcgdt"), Eq("A123"));
 }
+
+TEST_F(SoundexEncoding, UppercasesFirstLetter)
+{
+    ASSERT_THAT(soundexEncoder.encode("abcd"), StartsWith("A"));
+}
+
+TEST_F(SoundexEncoding, IgnoresCaseWhenEncodingConsonants)
+{
+    ASSERT_THAT(soundexEncoder.encode("BCDL"), Eq(soundexEncoder.encode("Bcdl")));
+}
+
+

@@ -5,10 +5,11 @@
 namespace soundex
 {
     static const size_t MaxCodeLength{ 4 };
+    static const std::string NotADigit{ "*" };
 	
     std::string SoundexEncoder::encode(const std::string& word)
     {
-        return zeroPad(head(word) + encodedDigits(tail(word)));
+        return zeroPad(upperFront(head(word)) + encodeDigits(tail(word)));
     }
 
     std::string SoundexEncoder::zeroPad(const std::string& word)
@@ -22,8 +23,6 @@ namespace soundex
         return word.substr(0, 1);
     }
 
-
-
     std::string SoundexEncoder::tail(const std::string& word)
     {
         return word.substr(1);
@@ -36,24 +35,24 @@ namespace soundex
 
     std::string SoundexEncoder::lastDigit(const std::string& encoding)
     {
-        if (encoding.empty()) return "";
+        if (encoding.empty()) return NotADigit;
         return std::string(1, encoding.back());
     }
 
-    std::string SoundexEncoder::encodedDigits(const std::string& word)
+    std::string SoundexEncoder::encodeDigits(const std::string& word)
     {
         std::string encoding;
         for (auto letter : word)
         {
             if (isComplete(encoding)) break;
-        	if(encodedDigit(letter) != lastDigit(encoding))
-				encoding += encodedDigit((letter));
+            auto digit = encodeDigit(letter);
+        	if(digit != NotADigit && digit != lastDigit(encoding))
+				encoding += digit;
         }
-    	
         return encoding;
     }
 
-    std::string SoundexEncoder::encodedDigit(const char letter) 
+    std::string SoundexEncoder::encodeDigit(const char letter) 
     {
         const std::unordered_map<char, std::string> encodings
         {
@@ -65,11 +64,19 @@ namespace soundex
         	{'m', "5"}, {'n', "5"},
         	{'r', "6"},
         };
-        return encodings.find(letter)->second;
+        const auto it =  encodings.find(lower(letter));
+        return it == encodings.end() ? NotADigit : it->second;
     }
 
-	
-	
+    std::string SoundexEncoder::upperFront(const std::string& string)
+    {
+        return std::string(1, std::toupper(static_cast<unsigned char>(string.front())));
+    }
+
+	char SoundexEncoder::lower(char letter)
+    {
+        return std::tolower(static_cast<unsigned char>(letter));
+    }
 }
 
 
