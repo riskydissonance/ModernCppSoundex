@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(const int argc, char** argv) {
-	const soundex::SoundexEncoder soundexEncoder;
+	soundex::SoundexEncoder soundexEncoder;
 	if(argc == 1)
 	{
 		cout << "No args passed" << endl;

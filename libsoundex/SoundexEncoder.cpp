@@ -1,9 +1,9 @@
-#include "SoundexEncoder.h"
 #include <string>
 #include <unordered_map>
 
 #include "charutil.h"
 #include "stringutil.h"
+#include "SoundexEncoder.h"
 
 namespace soundex
 {
@@ -30,7 +30,6 @@ namespace soundex
     {
 	    encoding += encodeDigit(word.front());
     }
-
 
     void SoundexEncoder::encodeLetter(std::string& encoding, const char letter, const char lastLetter)
     {
